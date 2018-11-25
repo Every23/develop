@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>xxx 后台管理系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/index.css">
+
+
+</head>
+<body>
+  <div class="container">
+    <%- include('./common/head.ejs') %>
+
+    <div class="lv-main">
+      <%- include('./common/menu.ejs') %>
+
+
+      <div class="body">
+        <!-- 搜索栏 -->
+          <form class="form-inline search-bar">
+              <input type="text" class="form-control">
+              <button class="btn btn-primary"> 搜索 </button>
+          </form>
+
+
+       <!-- 表格 -->
+        <div class="bs-example" data-example-id="bordered-table">
+          <table class="table table-bordered table-striped table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 分页 -->
+        <nav>
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+
+
+    </div>
+
+    <%- include('./common/foot.ejs') %>
+
+
+  </div>
+
+</body>
+</html>>
