@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var arr = require('./config/ignoreRouter');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,6 +19,34 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//自己实现的中间件函数，用来判断用户是否登录
+app.use(function(req,res,nexe){
+ // req.cookies('username');//cookies并不是一个方法
+ // req.get('Cookie');
+ //console.log(req.cookies.nickname);
+
+ //排除登录和注册
+//  if(req.url === '/login.html' || req.url === '/register.html' || req.url==='/users/login' || req.url === '/users/register'){
+//    next();
+//    return;
+//  }
+
+if(ignoreRouter.indexOf(req.url) > -1){
+  next();
+  return;
+}
+
+ //这段代码一直是redirect
+ var nickname = req.cookies.nickname;
+ if(nickname){
+   next();
+ }else{
+   //如果nickname不存在，就跳转到登录页面
+   res.redirect('/login.html');
+ }
+
+})
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -26,38 +26,32 @@
               <input type="text" class="form-control">
               <button class="btn btn-primary"> 搜索 </button>
           </form>
-
-
        <!-- 表格 -->
         <div class="bs-example" data-example-id="bordered-table">
           <table class="table table-bordered table-striped table-hover">
             <thead>
               <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>用户昵称</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>是否管理员</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+                <% for(var i = 0;i < list.length;i++){%>
+                  <tr>
+                    <th scope="row"><%= i+1 %></th>
+                    <td><%= list[i].username %></td>
+                    <td><%= list[i].nickname %></td>
+                    <td><%= list[i].age %></td>
+                    <td><%= list[i].sex %></td>
+                    <td><%= list[i].isAdmin %></td>
+                    <td><a href="/users/delete?id=<%= list[i]._id %>"> 删除 </a> </td>
+                  </tr>
+               <% } %>
             </tbody>
           </table>
         </div>
@@ -83,15 +77,8 @@
           </ul>
         </nav>
       </div>
-
-
-
     </div>
-
     <%- include('./common/foot.ejs') %>
-
-
   </div>
-
 </body>
-</html>>
+</html>

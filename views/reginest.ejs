@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="container">
+    <!-- 登录页面 -->
+    <h2> xx后台管理系统</h2>
+    <h3> 登录 </h3>
+    <form action="/users/login" method="POST">
+        <label >
+            <span>用户名：</span>
+            <input type="text" name="name" placeholder="请输入用户名">
+        </label><br/>
+        <label >
+          <span>昵&ensp;称：</span>
+          <input type="text" name="nickname" placeholder="请输入昵称">
+      </label><br/>
+      <label >
+        <label >
+            <span>密&ensp;码：</span>
+            <input type="password" name="pwd" placeholder="请输入密码">
+        </label><br/>
+        <label >
+          <span>年&ensp;龄：</span>
+          <input type="text" name="age" placeholder="请输入年龄">
+      </label><br/>
+      <label >
+          <span>性&ensp别：</span>
+          <input type="radio" name="sex" value="男"> 男
+          <input type="radio" name="sex" value="女"> 女
+      </label><br/>
+      <label >
+        <span>管理员：</span>
+        <input type="radio" name="isAdmin" value="是"> 是
+        <input type="radio" name="isAdmin" value="否"> 否
+    </label><br/>
+        <input type="submit" placeholder="注册" >
+        <a href="/login.html">有账号？立即登录！</a>
+        <br/>
+
+    </form>
+    </div>
+</body>
+</html>
