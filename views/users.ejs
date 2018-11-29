@@ -49,7 +49,11 @@
                     <td><%= list[i].age %></td>
                     <td><%= list[i].sex %></td>
                     <td><%= list[i].isAdmin %></td>
-                    <td><a href="/users/delete?id=<%= list[i]._id %>"> 删除 </a> </td>
+                    <td>
+                      <% if (!list[i].isAdmin) {%>
+                        <a href="/users/delete?id=<%= list[i]._id %>"> 删除 </a>
+                      <%} %>
+                    </td>
                   </tr>
                <% } %>
             </tbody>
@@ -60,17 +64,26 @@
         <nav>
           <ul class="pagination">
             <li>
-              <a href="#" aria-label="Previous">
+              <a href="/users?page=<%= currentPage - 1 < 1 ? 1 : currentPage -1 %>&pageSize=<%= pageSize%>" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li class="active"><a href="#">1</a></li>
+            <%for (var i = 0;i < totalPage;i++){%>
+              <li class="<%= currentPage === (i+1) ? 'active': '' %>"><a href="/users?page=<%= i+1 %>&pageSize=<%= pageSize%>"><%= i + 1%></a></li>
+            <%} %>
+              <!-- <%  for(var i = 0;i < totalPage; i++) {%>
+                <li class="<%= currentPage ===(i+1) ? 'active': ''%>" ><a href="#"> <%= i + 1%></a></li> 
+              <%} %> 
+            Unexpected identifier in D:\1809\number3\touchu1\11.29day9\code2\views\users.ejs while compiling ejs If the above error is not helpful, you may want to try EJS-Lint: https://github.com/RyanZim/EJS-Lint
+            //var 这个单词少输一位数 r就会出现这样的结果
+            -->
+            <!-- <li class="active"><a href="#">1</a></li>
             <li><a href="#">2</a></li>
             <li><a href="#">3</a></li>
             <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <li><a href="#">5</a></li> -->
             <li>
-              <a href="#" aria-label="Next">
+              <a href="/users?page=<%= currentPage + 1 > totalPage ? totalPage : currentPage + 1 %>&pageSize=<%= pageSize%>" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>

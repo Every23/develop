@@ -1,5 +1,7 @@
 var express = require('express');
 var MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectId;
+var async = require('async');
 var router = express.Router();
 
 var url = 'mongodb://127.0.0.1:27017';
@@ -11,36 +13,97 @@ router.get('/', function(req, res, next) {
   //将用户列表给列出来。
   //操作数据库，mogodb
   //下载：npm install --save mogodb
-  MongoClient.connect(url,function(err,client){
+
+  var page = parseInt(req.query.page) || 1;//前端传过来的页码
+  var pageSize = parseInt(req.query.pageSize) || 5;//每页显示的条数
+  var totalSize = 0;//总条数
+  var data = [];
+
+  //穿行无关联
+  MongoClient.connect(url,{useNewUrlParser:true},function(err,client){
     if(err){
-      //链接数据库失败
-      console.log('链接数据库失败',err);
       res.render('error',{
-        message:'链接数据库失败',
+        message:'链接失败',
         error:err
-      });
+      })
       return;
     }
     var db = client.db('project');
+    async.series([
+      function(cb){
+        db.collection('user').find().count(function(err,num){
+          if(err){
+            cb(err);
+          }else{
+            totalSize = num;
+            cb(null);
+          }
+        })
+      },
+      function(cb){
+        //数据库 //limit() //skip()
 
-    db.collection('user').find().toArray(function(err,data){
+        db.collection('user').find().limit(pageSize).skip(page*pageSize-pageSize).toArray(function(err,data){
+          if(err){
+            cb(err);
+          }else{
+           // data = data;
+            cb(null,data);
+          }
+        })
+      }
+    ],function(err,results){ 
+      //results这个地方是个数组,[undefined,data]
       if(err){
-        console.log('查询用户数据失败',err);
-        //有错误，渲染error.ejs
         res.render('error',{
-          message:'查询失败',//message前端页面可以渲染一下错误
+          message:'错误',
           error:err
         })
       }else{
-        console.log(data);
+        var totalPage = Math.ceil(totalSize/pageSize);//向上取整总的页数
         res.render('users',{
-          list:data
-        });
+          list: results[1],
+         // list:data
+        //  totalSize:totalSize,
+        totalPage: totalPage,
+        pageSize: pageSize,
+         currentPage: page
+
+        })
       }
-      //关闭数据库的链接
-      client.close();
     })
-  });
+  })
+
+  // MongoClient.connect(url,function(err,client){
+  //   if(err){
+  //     //链接数据库失败
+  //     console.log('链接数据库失败',err);
+  //     res.render('error',{
+  //       message:'链接数据库失败',
+  //       error:err
+  //     });
+  //     return;
+  //   }
+  //   var db = client.db('project');
+
+  //   db.collection('user').find().toArray(function(err,data){
+  //     if(err){
+  //       console.log('查询用户数据失败',err);
+  //       //有错误，渲染error.ejs
+  //       res.render('error',{
+  //         message:'查询失败',//message前端页面可以渲染一下错误
+  //         error:err
+  //       })
+  //     }else{
+  //       console.log(data);
+  //       res.render('users',{
+  //         list:data
+  //       });
+  //     }
+  //     //关闭数据库的链接
+  //     client.close();
+  //   })
+  // });
  // res.render('users');
 });
 
@@ -49,10 +112,6 @@ router.get('/', function(req, res, next) {
 //登录操作 localhost:3000/users/login
 router.post('/login',function(req,res){
   //1,获取前端传递过来的参数
-  // console.log(req.body);
-  // res.render('')
-  // //console.log('跳转成功');//路由问题等在修改
-  // res.send('');
   var username = req.body.name;
   var password = req.body.pwd;
   //2，验证参数的有效性
@@ -102,7 +161,7 @@ router.post('/login',function(req,res){
     //   //登录成功，写入cookie
     //   res.cookie('nickname',)
 
-    //   res.redirect('http://localhost:3000/');//res.redirect这个是要跳转的页面
+     //  res.redirect('http://localhost:3000/');//res.redirect这个是要跳转的页面
     //   //res.redirect('/');
 
     // }else{
@@ -114,10 +173,9 @@ router.post('/login',function(req,res){
     // }
     // client.close();
     // })
-
     db.collection('user').find({
       username:username,
-      password:password
+      pressword:password
     }).toArray(function(err,data){
       if(err){
         console.log('查询失败',err);
@@ -125,7 +183,7 @@ router.post('/login',function(req,res){
           message:'查询失败',
           error:err
         })
-      }else if(data.length<=0){
+      }else if(data.length <= 0){
         //没找到，登录失败
         res.render('error',{
           message:'登录失败',
@@ -142,7 +200,6 @@ router.post('/login',function(req,res){
       }
       client.close();
     })
-
   })
 //  //res.send('');//注意这里，因为MongoDB的操作时异步操作代码先执行这一句所以，上面的就没有执行
 });
@@ -212,14 +269,6 @@ function(cb){
 
   })
 })
-
-
-
-
-
-
-
-
   // MongoClient.connect(url,{useNewUrlParser:true},function(err,client){
   //   if(err){
   //     res.render('error',{
@@ -253,7 +302,7 @@ function(cb){
   // })
 })
 
-//删除操作
+//删除操作localhost:3000/users/delete
 router.get('/delete',function(req,res){
   var id = req.query.id;
   MongoClient.connect(url,{useNewUrlParser:true},function(err,client){
@@ -266,9 +315,10 @@ router.get('/delete',function(req,res){
     }
     var db = client.db('project');
     db.collection('user').deleteOne({
-    _id:Object(id)
+    _id:ObjectId(id)
+    //_id:id
     },function(err,data){
-      //console.log(data);
+      console.log(data);
       if(err){
         res.render('error',{
           message:'删除失败',
@@ -277,17 +327,13 @@ router.get('/delete',function(req,res){
       }else{
         //删除失败，页面刷新一下
         //res.reload nodejs
-        //location.reload();
+        //location.reload();//没有reload的方法
         //res.redirect('/users');
-        res.send('<script>location.reload();</script>');
+        //res.send('<script>location.reload();</script>');
+        res.redirect('/users');
       }
       client.close();
     })
   })
-
-
 })
-
-
-
 module.exports = router;

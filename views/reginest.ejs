@@ -10,9 +10,9 @@
 </head>
 <body>
     <div class="container">
-    <!-- 登录页面 -->
+    <!-- 注册页面 -->
     <h2> xx后台管理系统</h2>
-    <h3> 登录 </h3>
+    <h3> 注册 </h3>
     <form action="/users/login" method="POST">
         <label >
             <span>用户名：</span>
@@ -32,14 +32,14 @@
           <input type="text" name="age" placeholder="请输入年龄">
       </label><br/>
       <label >
-          <span>性&ensp别：</span>
-          <input type="radio" name="sex" value="男"> 男
+          <span>性&ensp;别：</span>
+          <input type="radio" name="sex" value="男" checked> 男
           <input type="radio" name="sex" value="女"> 女
       </label><br/>
       <label >
         <span>管理员：</span>
         <input type="radio" name="isAdmin" value="是"> 是
-        <input type="radio" name="isAdmin" value="否"> 否
+        <input type="radio" name="isAdmin" value="否" checked> 否
     </label><br/>
         <input type="submit" placeholder="注册" >
         <a href="/login.html">有账号？立即登录！</a>

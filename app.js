@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var arr = require('./config/ignoreRouter');
+var ignoreRouter = require('./config/ignoreRouter');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //自己实现的中间件函数，用来判断用户是否登录
-app.use(function(req,res,nexe){
+app.use(function(req,res,next){
  // req.cookies('username');//cookies并不是一个方法
  // req.get('Cookie');
  //console.log(req.cookies.nickname);
@@ -32,6 +32,7 @@ app.use(function(req,res,nexe){
 //    return;
 //  }
 
+//排除登录和注册
 if(ignoreRouter.indexOf(req.url) > -1){
   next();
   return;

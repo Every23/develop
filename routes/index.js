@@ -21,7 +21,7 @@ router.get('/login.html',function(req,res,next){
 
 
 // 注册页面
-router.get('/reginest.html',function(req,res){
+router.get('/register.html',function(req,res,next){
   res.render('reginest');
 });
 
