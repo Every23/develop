@@ -22,6 +22,20 @@
       <%- include('./common/menu.ejs') %>
 
       <div class="body">
+        <form action="/phone/addPhone" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="text" name="phoneName" placeholder="手机名称">
+          <input type="submit" value="提交">
+        </form>
+
+        <ul>
+          <% for(var i = 0;i < list.length;i++) {%>
+            <li>
+              <img src="/<%= list[i].fileName %>" alt="">
+              <span><%= list[i].phoneName %></span>
+            </li> 
+          <%}%>
+        </ul>
         <!-- 搜索栏 -->
         <form class="form-inline search-bar">
             <input type="text" class="form-control">
@@ -31,7 +45,7 @@
 
      <!-- 表格 -->
       <div class="bs-example" data-example-id="bordered-table">
-        <table class="table table-bordered table-striped table-hover">
+        <!-- <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>序号</th>
@@ -72,7 +86,7 @@
                 <td><a href="#" class="xiugai"> 修改 </a> <a href="#" class="del"> 删除 </a></td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
       
       <!-- 分页 -->
