@@ -22,13 +22,17 @@
       <%- include('./common/menu.ejs') %>
 
       <div class="body">
-     
 
-       <!-- 搜索栏 -->
-       <form class="form-inline search-bar">
-          <input type="text" class="form-control">
-          <button class="btn btn-primary"> 搜索 </button>
+      <button class="btn-new">新增品牌</button>
+
+      <form action="/brand/addbrand" method="POST" enctype="multipart/form-data">
+       品牌名称： <input type="text" name="brandname" placeholder="请输入官方指导价"><br/>
+       品牌LOGO：<input type="file" name="file" >
+                  <input type="submit" name="ok"  value="确认">
+                  <input type="button" name="off" value="取消">
       </form>
+
+
 
 
    <!-- 表格 -->
@@ -47,13 +51,13 @@
             <% for(var i = 0;i < list.length;i++){%>
               <tr>
                 <th scope="row"><%= i+1 %></th>
-                <td><%= list[i].brandLogo %></td>
+                <td><img src="<%= list[i].fileName %>"></td>
                 <td><%= list[i].brandname %></td>
-                <td><%= list[i].isAdmin %></td>
+                <!-- <td><%= list[i].isAdmin %></td> -->
                 <td>
                   <% if (!list[i].isAdmin) {%>
                     <a href="#"> 修改 </a>
-                    <a href="/users/delete?id=<%= list[i]._id %>"> 删除 </a>
+                    <a href="/brand/delete?id=<%= list[i]._id %>"> 删除 </a>
                   <%} %>
                 </td>
               </tr>
@@ -84,23 +88,24 @@
     <!-- 分页 -->
     <nav>
       <ul class="pagination">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        
-        <%for (var i = 0;i < totalPage;i++){%>
-          <li class="<%= currentPage === (i+1) ? 'active': '' %>"><a href="/users?page=<%= i+1 %>&pageSize=<%= pageSize%>"><%= i + 1%></a></li>
-        <%} %>
+          <li>
+              <a href="/brand?page=<%= currentPage - 1 < 1 ? 1 : currentPage -1 %>&pageSize=<%= pageSize%>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <%for (var i = 0;i < totalPage;i++){%>
+              <li class="<%= currentPage === (i+1) ? 'active': '' %>"><a href="/brand?page=<%= i+1 %>&pageSize=<%= pageSize%>"><%= i + 1%></a></li>
+            <%} %>
+
 
         <!-- <li class="active"><a href="#">1</a></li>
         <li><a href="#">2</a></li>
         <li><a href="#">3</a></li>
         <li><a href="#">4</a></li>
         <li><a href="#">5</a></li> -->
+       
         <li>
-          <a href="#" aria-label="Next">
+          <a href="/brand?page=<%= currentPage + 1 > totalPage ? totalPage : currentPage + 1 %>&pageSize=<%= pageSize%>" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

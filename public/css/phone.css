@@ -4,5 +4,9 @@ tbody tr td img {
   width: 107px;
   height: 47px;
 }
+.btn-new{width: 245px;height: 55px;border: 1px solid #ccc;text-align: center;border-radius: 12px;margin: 20px 0 20px 20px;}
+img{display: block;width: 100px;height: 20px;}
+
+/* body form{display: none;} */
 
 /*# sourceMappingURL=phone.css.map */

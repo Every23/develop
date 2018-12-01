@@ -3,10 +3,9 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 var async = require('async');
 var router = express.Router();
-
 var url = 'mongodb://127.0.0.1:27017';
 
-/* GET users listing. */
+
 //localhost:3000/users
 router.get('/', function(req, res, next) {
   //res.send('respond with a resource');
@@ -15,11 +14,11 @@ router.get('/', function(req, res, next) {
   //下载：npm install --save mogodb
 
   var page = parseInt(req.query.page) || 1;//前端传过来的页码
-  var pageSize = parseInt(req.query.pageSize) || 5;//每页显示的条数
+  var pageSize = parseInt(req.query.pageSize) || 3;//每页显示的条数
   var totalSize = 0;//总条数
   var data = [];
 
-  //穿行无关联
+  //串行无关联
   MongoClient.connect(url,{useNewUrlParser:true},function(err,client){
     if(err){
       res.render('error',{
@@ -107,6 +106,69 @@ router.get('/', function(req, res, next) {
  // res.render('users');
 });
 
+
+
+// 搜索
+router.get("/seek", function (req, res) {
+  var seekl = req.query.seek;
+  var seek = new RegExp(seekl);
+  var page = parseInt(req.query.page || 1); //前端传过来的页码
+  var pageSize = parseInt(req.query.pageSize || 3); //每页显示的条数
+  var totalSize = 0; //总条数 需要自己查询数据库
+  MongoClient.connect(url, {
+    useNewUrlParser: true
+  }, function (err, client) {
+    if (err) {
+      res.render("error", {
+        message: "连接数据库失败",
+        error: err
+      })
+      return;
+    }
+    var db = client.db("project");
+    async.series([function (cb) {
+      db.collection("user").find({
+        nickname: seek
+      }).count(function (err, num) {
+        if (err) {
+          cb(err);
+        } else {
+          totalsize = num;
+          cb(null);
+        }
+      })
+    }, function (cb) {
+      console.log(seek)
+      var index = page * pageSize - pageSize;
+      var pageSize = parseInt(req.query.pageSize || 3); //每页显示的条数
+      db.collection("user").find({
+        nickname: seek
+      }).toArray(function (err, data) {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, data);
+        }
+      })
+    }], function (err, result) {
+      if (err) {
+        res.render("err", {
+          message: "查询错误",
+          error: err
+        })
+      } else {
+        var totalPage = Math.ceil(totalSize / pageSize); //向上取整
+        res.render("users", {
+          list: result[1],
+          totalPage: totalPage,
+          pageSize: pageSize,
+          currentPage: page
+        })
+        client.close()
+      }
+    })
+  })
+})
 
 
 //登录操作 localhost:3000/users/login

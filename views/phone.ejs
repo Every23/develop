@@ -22,30 +22,25 @@
       <%- include('./common/menu.ejs') %>
 
       <div class="body">
-        <form action="/phone/addPhone" method="POST" enctype="multipart/form-data">
-          <input type="file" name="file">
-          <input type="text" name="phoneName" placeholder="手机名称">
-          <input type="submit" value="提交">
-        </form>
 
-        <ul>
-          <% for(var i = 0;i < list.length;i++) {%>
-            <li>
-              <img src="/<%= list[i].fileName %>" alt="">
-              <span><%= list[i].phoneName %></span>
-            </li> 
-          <%}%>
-        </ul>
-        <!-- 搜索栏 -->
-        <form class="form-inline search-bar">
-            <input type="text" class="form-control">
-            <button class="btn btn-primary"> 搜索 </button>
-        </form>
+      <button class="btn-new">新增手机</button>
+
+      <form action="/phone/addPhone" method="POST" enctype="multipart/form-data">
+       名称： <input type="text" name="phoneName" placeholder="请输入手机名称"><br/>
+       品牌： <input type="text" name="brandOnly" placeholder="华为"><br/>
+       官方指导价： <input type="text" name="phonePrice" placeholder="请输入官方指导价"><br/>
+       二手回收价： <input type="text" name="twoPrice" placeholder="请输入二手回收价"><br/>
+       图片： <input type="file" name="file">
+       <!-- <input type="text" name="picture" placeholder="手机名称"> -->
+       <br/>
+       <input type="submit" name="ok"  value="确认">
+       <input type="button" name="off" value="取消">
+      </form>
 
 
      <!-- 表格 -->
       <div class="bs-example" data-example-id="bordered-table">
-        <!-- <table class="table table-bordered table-striped table-hover">
+        <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>序号</th>
@@ -58,7 +53,27 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+              <% for(var i = 0;i < list.length;i++){%>
+                <tr>
+                  <th scope="row"><%= i+1 %></th>
+                  <td>
+                    <img src="<%= list[i].fileName %>">
+                  </td>
+                  <td><%= list[i].phoneName %></td>
+                  <td><%= list[i].brandOnly %></td>
+                  <td><%= list[i].phonePrice %></td>
+                  <td><%= list[i].twoPrice %></td>
+                  <!-- <td><%= list[i].isAdmin %></td> -->
+                  <td>
+                    <% if (!list[i].isAdmin) {%>
+                      <a href="#"> 修改 </a>
+                      <a href="/phone/delete?id=<%= list[i]._id %>"> 删除 </a>
+                    <%} %>
+                  </td>
+                </tr>
+             <% } %>
+
+            <!-- <tr>
               <th scope="row">1</th>
               <td><a href="#"><img src="/images/pic-meizu.jpg" alt=""> </a></td>
               <td> 魅族手机 </td>
@@ -84,38 +99,36 @@
                 <td>￥3456</td>
                 <td>￥2456</td>
                 <td><a href="#" class="xiugai"> 修改 </a> <a href="#" class="del"> 删除 </a></td>
-            </tr>
+            </tr> -->
           </tbody>
-        </table> -->
+        </table>
       </div>
       
       <!-- 分页 -->
       <nav>
-        <ul class="pagination">
-          <li>
-            <a href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li>
-            <a href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-
-
+          <ul class="pagination">
+            <li>
+              <a href="/phone?page=<%= currentPage - 1 < 1 ? 1 : currentPage -1 %>&pageSize=<%= pageSize%>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <%for (var i = 0;i < totalPage;i++){%>
+              <li class="<%= currentPage === (i+1) ? 'active': '' %>"><a href="/phone?page=<%= i+1 %>&pageSize=<%= pageSize%>"><%= i + 1%></a></li>
+            <%} %>
+            <!-- <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li> -->
+            <li>
+              <a href="/phone?page=<%= currentPage + 1 > totalPage ? totalPage : currentPage + 1 %>&pageSize=<%= pageSize%>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
         
       </div>
-
-
 
     </div>
 

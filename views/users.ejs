@@ -22,10 +22,12 @@
 
       <div class="body">
         <!-- 搜索栏 -->
-          <form class="form-inline search-bar">
-              <input type="text" class="form-control">
-              <button class="btn btn-primary"> 搜索 </button>
-          </form>
+        <form class="form-inline seach" action="/users/seek" method="GET">
+          <input id="searchInput" name="seek" type="text" class="form-control">
+          <button id="searchBtn" class="btn btn-primary">搜索</button>
+        </form>
+
+         
        <!-- 表格 -->
         <div class="bs-example" data-example-id="bordered-table">
           <table class="table table-bordered table-striped table-hover">
